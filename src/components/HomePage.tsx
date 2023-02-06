@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { getPlayerName } from "../features/bingo/bingoSlice";
 import UserName from "./UserName";
 import BingoBoard from "./BingoBoard";
-import { AppBar, Container, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const HomePage = () => {
   const [open, setOpen] = useState(true);
@@ -11,19 +11,17 @@ const HomePage = () => {
 
   return (
     <>
-      <AppBar position="static">
-        <Container maxWidth="xl">
-          {player.length ? (
-            <Typography variant="h6" noWrap component="a">
-              {player}'s bingo Board
-            </Typography>
-          ) : (
-            <Typography variant="h6" noWrap component="a">
-              Bingo Board
-            </Typography>
-          )}
-        </Container>
-      </AppBar>
+      <Box sx={{ textAlign: "center", marginTop: 5 }}>
+        {player.length ? (
+          <Typography variant="h2" noWrap component="a">
+            Hello {player}
+          </Typography>
+        ) : (
+          <Typography variant="h2" noWrap component="a">
+            Bingo Board
+          </Typography>
+        )}
+      </Box>
 
       {player.length ? (
         <BingoBoard />

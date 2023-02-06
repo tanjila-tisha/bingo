@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   Grid,
   Paper,
   Table,
@@ -27,16 +25,18 @@ import {
 } from "../features/bingo/bingoSlice";
 import { AppDispatch } from "../store";
 import { getCenter } from "../utils";
+import DisplayCard from "./DisplayCard";
 
 const BingoBoard = () => {
   const [showStats, setShowStats] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
+
   const board = useSelector(getBoard);
   const currentGame = useSelector(getCurrentGame);
   const dimention = useSelector(getDimention);
   const isOver = useSelector(isGameOver);
   const center = getCenter(dimention);
-
   const history = useSelector(getHistory);
 
   useEffect(() => {
@@ -44,116 +44,99 @@ const BingoBoard = () => {
   }, [dispatch]);
 
   return (
-    <Grid>
-      <Box
-        sx={{
-          marginTop: 10,
-        }}
-      >
-        {isOver && (
-          <Box
-            sx={{
-              margin: 5,
-            }}
-          >
-            <Typography variant="h3">Hurre BINGO: GAME OVER!!!!</Typography>
-          </Box>
-        )}
-        <TableContainer component={Paper} sx={{ maxWidth: 500 }}>
-          <Table>
-            <TableHead>
-              <TableRow
-                className="table-header"
-                sx={{ backgroundColor: "black", color: "white" }}
-              >
-                <TableCell align="center" className="table-header-column">
-                  B
-                </TableCell>
-                <TableCell align="center" className="table-header-column">
-                  I
-                </TableCell>
-                <TableCell align="center" className="table-header-column">
-                  N
-                </TableCell>
-                <TableCell align="center" className="table-header-column">
-                  G
-                </TableCell>
-                <TableCell align="center" className="table-header-column">
-                  O
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {board.map((col, colIndex) => (
-                <TableRow key={`col-${colIndex}`}>
-                  {col.map((row, rowIndex) => (
-                    <TableCell
-                      align="center"
-                      key={`row-${rowIndex}`}
-                      className={row.isDrawn ? "drawn" : "square"}
-                    >
-                      {colIndex === center && rowIndex === center
-                        ? "FREE"
-                        : row.value}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        <Box sx={{ margin: 5 }}>
-          <Button
-            variant="contained"
-            onClick={() => dispatch(drawNumber())}
-            disabled={isOver}
-          >
-            {!isOver ? "Draw Number" : "GAME OVER"}
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => dispatch(resetGame())}
-            sx={{ margin: 5 }}
-          >
-            New game
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => setShowStats(!showStats)}
-            sx={{ margin: 5 }}
-          >
-            {showStats ? "Hide Stats" : "Show Stats"}
-          </Button>
-        </Box>
-      </Box>
-      {currentGame && (
-        <Card sx={{ minWidth: 500, padding: 5, textAlign: "center" }}>
-          <CardContent>
-            <Typography variant="h4">Drawn number:</Typography>
-            <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
-              {currentGame}
+    <>
+      <Grid sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ marginTop: 10 }}>
+          {isOver && (
+            <Typography variant="h3" sx={{ marginBottom: 5 }}>
+              Hurre BINGO: GAME OVER!!!!
             </Typography>
-          </CardContent>
-        </Card>
-      )}
-      {showStats &&
-        history.map((item, index) => {
-          return (
-            <Card
-              sx={{ minWidth: 500, padding: 5, textAlign: "center" }}
-              key={`history-${index}`}
+          )}
+          <TableContainer component={Paper} sx={{ maxWidth: 500 }}>
+            <Table>
+              <TableHead>
+                <TableRow
+                  className="table-header"
+                  sx={{ backgroundColor: "black", color: "white" }}
+                >
+                  <TableCell align="center" className="table-header-column">
+                    B
+                  </TableCell>
+                  <TableCell align="center" className="table-header-column">
+                    I
+                  </TableCell>
+                  <TableCell align="center" className="table-header-column">
+                    N
+                  </TableCell>
+                  <TableCell align="center" className="table-header-column">
+                    G
+                  </TableCell>
+                  <TableCell align="center" className="table-header-column">
+                    O
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {board.map((col, colIndex) => (
+                  <TableRow key={`col-${colIndex}`}>
+                    {col.map((row, rowIndex) => (
+                      <TableCell
+                        align="center"
+                        key={`row-${rowIndex}`}
+                        className={row.isDrawn ? "drawn" : "square"}
+                      >
+                        {colIndex === center && rowIndex === center
+                          ? "FREE"
+                          : row.value}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <Box
+            sx={{ display: "flex", justifyContent: "space-around", margin: 5 }}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => dispatch(drawNumber())}
+              disabled={isOver}
             >
-              <CardContent>
-                <Typography variant="h4">Game {index + 1}:</Typography>
-                <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
-                  {item.join(",")}
-                </Typography>
-              </CardContent>
-            </Card>
-          );
-        })}
-    </Grid>
+              {!isOver ? "Draw Number" : "GAME OVER"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => dispatch(resetGame())}
+              sx={{ marginLeft: 5 }}
+            >
+              New game
+            </Button>
+            {!!history.length && (
+              <Button
+                variant="outlined"
+                onClick={() => setShowStats(!showStats)}
+                sx={{ marginLeft: 5 }}
+              >
+                {showStats ? "Hide Stats" : "Show Stats"}
+              </Button>
+            )}
+          </Box>
+        </Box>
+      </Grid>
+      {currentGame && <DisplayCard item={currentGame} title="Drawn number" />}
+      {showStats && (
+        <Box sx={{ marginTop: 5 }}>
+          <Typography variant="h3" sx={{ textAlign: "center" }}>
+            History
+          </Typography>
+          {history.map((item, index) => (
+            <DisplayCard item={item.join(",")} title={`Game ${index + 1}`} />
+          ))}
+        </Box>
+      )}
+    </>
   );
 };
 

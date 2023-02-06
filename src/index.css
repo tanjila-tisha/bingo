@@ -10,11 +10,11 @@ table .table-header{
 table .table-header .table-header-column{
   color: white;
 }
-.drawn {
-  color: grey;
+.MuiTableRow-root .drawn {
+  color: red;
   opacity: 0.6;
-  font-size: 16px;
-  font-weight: normal;
+  font-size: 24px;
+  font-weight: bold;
   border: 1px solid gray;
 
 }

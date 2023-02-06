@@ -12,11 +12,19 @@ const getConditions = (dimention: number): Array<Array<number>> => {
   return conditions;
 };
 
+export const getCenter = (dimention: number) => Math.floor(dimention / 2);
+
+export const generateRandomInteger = (min: number, max: number): number => {
+  return Math.floor(min + Math.random() * (max - min + 1));
+};
+
 export const newBoard = (dimention: number): BoardInfo => {
-  const conditions = getConditions(dimention);
   const board: Array<Array<Square>> = [];
   const line: Line = {};
+
+  const conditions = getConditions(dimention);
   const center = getCenter(dimention);
+
   for (var i = 0; i < dimention; i++) {
     const rows = [];
     for (var j = 0; j < dimention; j++) {
@@ -33,12 +41,6 @@ export const newBoard = (dimention: number): BoardInfo => {
   line[`${dimention}${dimention}`] = 1;
   line[`${-1}${-1}`] = 1;
   return { board, line };
-};
-
-export const getCenter = (dimention: number) => Math.floor(dimention / 2);
-
-export const generateRandomInteger = (min: number, max: number): number => {
-  return Math.floor(min + Math.random() * (max - min + 1));
 };
 
 export const checkBoard = (
