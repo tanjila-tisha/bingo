@@ -70,7 +70,9 @@ export const { createBoard, setPlayerName, drawNumber, resetGame } =
 export const getPlayerName = (state: RootState) => state.bingo.playerName;
 export const getDimention = (state: RootState) => state.bingo.dimention;
 export const getBoard = (state: RootState) => state.bingo.board;
-export const getHistory = (state: RootState) => state.bingo.history;
+export const getHistory = (state: RootState) => {
+  return state.bingo.history.slice(0, state.bingo.history.length - 1);
+};
 export const getLine = (state: RootState) => state.bingo.line;
 export const isGameOver = (state: RootState) => state.bingo.isGameOver;
 export const getCurrentGame = (state: RootState) => {

@@ -22,7 +22,6 @@ import {
   getCurrentGame,
   getDimention,
   getHistory,
-  getLine,
   isGameOver,
   resetGame,
 } from "../features/bingo/bingoSlice";
@@ -34,19 +33,15 @@ const BingoBoard = () => {
   const dispatch = useDispatch<AppDispatch>();
   const board = useSelector(getBoard);
   const currentGame = useSelector(getCurrentGame);
-  const line = useSelector(getLine);
-  console.log("line", line);
   const dimention = useSelector(getDimention);
   const isOver = useSelector(isGameOver);
   const center = getCenter(dimention);
 
   const history = useSelector(getHistory);
 
-  console.log("history", history);
-
   useEffect(() => {
     dispatch(createBoard());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Grid>
@@ -143,9 +138,12 @@ const BingoBoard = () => {
         </Card>
       )}
       {showStats &&
-        history.slice(0, history.length - 2).map((item, index) => {
+        history.map((item, index) => {
           return (
-            <Card sx={{ minWidth: 500, padding: 5, textAlign: "center" }}>
+            <Card
+              sx={{ minWidth: 500, padding: 5, textAlign: "center" }}
+              key={`history-${index}`}
+            >
               <CardContent>
                 <Typography variant="h4">Game {index + 1}:</Typography>
                 <Typography variant="body1" sx={{ wordBreak: "break-all" }}>

@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { getPlayerName } from "../features/bingo/bingoSlice";
 import UserName from "./UserName";
@@ -25,7 +25,7 @@ const HomePage = () => {
         </Container>
       </AppBar>
 
-      {!player.length ? (
+      {player.length ? (
         <BingoBoard />
       ) : (
         <UserName open={open} setOpen={setOpen} />

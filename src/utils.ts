@@ -52,8 +52,6 @@ export const checkBoard = (
   for (var i = 0; i < dimention; i++) {
     for (var j = 0; j < dimention; j++) {
       if (!board[i][j].isDrawn && board[i][j].value === number) {
-        console.log("Number", number);
-        console.log("I J", i, j);
         // if center of board, which is already marked do nothing.
         if (i === center && j === center) continue;
 
@@ -66,7 +64,7 @@ export const checkBoard = (
         line[`${i}${dimention}`] += 1;
         line[`${dimention}${j}`] += 1;
 
-        //reserve diagonal check
+        //reserve diagonal check for 5*5
         if (
           (i === 0 && j === dimention - 1) ||
           (i === dimention - 1 && j === 0) ||
