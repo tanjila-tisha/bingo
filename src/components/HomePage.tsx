@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { getPlayerName } from "../features/bingo/bingoSlice";
-import UserName from "./UserName";
-import BingoBoard from "./BingoBoard";
 import { Box, Typography } from "@mui/material";
+import { getPlayerName } from "../features/bingo/bingoSlice";
+import UserNameDialog from "./UserNameDialog";
+import BingoBoard from "./BingoBoard";
 
-const HomePage = () => {
+const HomePage = (): JSX.Element => {
   const [open, setOpen] = useState(true);
   const player = useSelector(getPlayerName);
 
@@ -26,7 +26,7 @@ const HomePage = () => {
       {player.length ? (
         <BingoBoard />
       ) : (
-        <UserName open={open} setOpen={setOpen} />
+        <UserNameDialog open={open} setOpen={setOpen} />
       )}
     </>
   );

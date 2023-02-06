@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import { checkBoard, generateRandomInteger, newBoard } from "../../utils";
-import { Line, Square } from "../../types";
+import { DecisionLine, Square } from "../../types";
 
 interface BingoState {
   playerName: string;
   dimention: number;
   board: Array<Array<Square>>;
-  line: Line;
+  decisionLines: DecisionLine;
   isGameOver: boolean;
   shots: number;
   history: Array<Array<number>>;
@@ -18,7 +18,7 @@ const initialState: BingoState = {
   playerName: "",
   dimention: 5,
   board: [],
-  line: {},
+  decisionLines: {},
   shots: 0,
   isGameOver: false,
   history: [],
@@ -32,22 +32,22 @@ export const bingoSlice = createSlice({
       state.playerName = action.payload;
     },
     createBoard: (state) => {
-      const { board, line } = newBoard(state.dimention);
+      const { board, decisionLines } = newBoard(state.dimention);
       state.board = board;
-      state.line = line;
+      state.decisionLines = decisionLines;
     },
     resetGame: (state) => {
-      const { board, line } = newBoard(state.dimention);
+      const { board, decisionLines } = newBoard(state.dimention);
       state.board = board;
-      state.line = line;
+      state.decisionLines = decisionLines;
       state.isGameOver = false;
       state.shots = 0;
     },
     drawNumber: (state) => {
       const number = generateRandomInteger(1, 75);
-      const { board, line, isGameOver } = checkBoard(
+      const { board, decisionLines, isGameOver } = checkBoard(
         state.board,
-        state.line,
+        state.decisionLines,
         number
       );
       const numberOfShots = state.shots;
@@ -58,7 +58,7 @@ export const bingoSlice = createSlice({
       }
       state.shots += 1;
       state.board = board;
-      state.line = line;
+      state.decisionLines = decisionLines;
       state.isGameOver = isGameOver;
     },
   },
@@ -67,15 +67,20 @@ export const bingoSlice = createSlice({
 export const { createBoard, setPlayerName, drawNumber, resetGame } =
   bingoSlice.actions;
 
-export const getPlayerName = (state: RootState) => state.bingo.playerName;
-export const getDimention = (state: RootState) => state.bingo.dimention;
+// Selectors
+export const getPlayerName = (state: RootState): string =>
+  state.bingo.playerName;
+
+export const getDimention = (state: RootState): number => state.bingo.dimention;
+
 export const getBoard = (state: RootState) => state.bingo.board;
+
 export const getHistory = (state: RootState) => {
   return state.bingo.history.slice(0, state.bingo.history.length - 1);
 };
-export const getLine = (state: RootState) => state.bingo.line;
-export const isGameOver = (state: RootState) => state.bingo.isGameOver;
-export const getCurrentGame = (state: RootState) => {
+export const isGameOver = (state: RootState): boolean => state.bingo.isGameOver;
+
+export const getCurrentGame = (state: RootState): string | null => {
   const numberOfShots = state.bingo.shots;
   if (!numberOfShots) return null;
   return state.bingo.history[state.bingo.history.length - 1].join(",");

@@ -3,11 +3,11 @@ export interface Square {
   isDrawn: boolean;
 }
 
-export interface Line {
+export interface DecisionLine {
   [key: string]: number;
 }
 
 export interface BoardInfo {
   board: Array<Array<Square>>;
-  line: Line;
+  decisionLines: DecisionLine;
 }

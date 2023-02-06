@@ -1,4 +1,4 @@
-import { BoardInfo, Line, Square } from "./types";
+import { BoardInfo, DecisionLine, Square } from "./types";
 
 const getConditions = (dimention: number): Array<Array<number>> => {
   const conditions = [];
@@ -12,7 +12,8 @@ const getConditions = (dimention: number): Array<Array<number>> => {
   return conditions;
 };
 
-export const getCenter = (dimention: number) => Math.floor(dimention / 2);
+export const getCenter = (dimention: number): number =>
+  Math.floor(dimention / 2);
 
 export const generateRandomInteger = (min: number, max: number): number => {
   return Math.floor(min + Math.random() * (max - min + 1));
@@ -20,7 +21,7 @@ export const generateRandomInteger = (min: number, max: number): number => {
 
 export const newBoard = (dimention: number): BoardInfo => {
   const board: Array<Array<Square>> = [];
-  const line: Line = {};
+  const decisionLines: DecisionLine = {};
 
   const conditions = getConditions(dimention);
   const center = getCenter(dimention);
@@ -34,23 +35,24 @@ export const newBoard = (dimention: number): BoardInfo => {
       };
       rows.push(square);
     }
-    line[`${i}${j}`] = i === center || j === center ? 1 : 0;
-    line[`${j}${i}`] = i === center || j === center ? 1 : 0;
+    decisionLines[`${i}${j}`] = i === center || j === center ? 1 : 0;
+    decisionLines[`${j}${i}`] = i === center || j === center ? 1 : 0;
     board.push(rows);
   }
-  line[`${dimention}${dimention}`] = 1;
-  line[`${-1}${-1}`] = 1;
-  return { board, line };
+  decisionLines[`${dimention}${dimention}`] = 1;
+  decisionLines[`${-1}${-1}`] = 1;
+  return { board, decisionLines };
 };
 
 export const checkBoard = (
   board: Array<Array<Square>>,
-  line: Line,
+  decisionLines: DecisionLine,
   number: number
 ) => {
   const dimention = board.length;
   const center = getCenter(dimention);
   let isGameOver = false;
+
   for (var i = 0; i < dimention; i++) {
     for (var j = 0; j < dimention; j++) {
       if (!board[i][j].isDrawn && board[i][j].value === number) {
@@ -59,12 +61,12 @@ export const checkBoard = (
 
         // If same index
         if (i === j) {
-          line[`${dimention}${dimention}`] += 1;
+          decisionLines[`${dimention}${dimention}`] += 1;
         }
 
         board[i][j].isDrawn = true;
-        line[`${i}${dimention}`] += 1;
-        line[`${dimention}${j}`] += 1;
+        decisionLines[`${i}${dimention}`] += 1;
+        decisionLines[`${dimention}${j}`] += 1;
 
         //reserve diagonal check for 5*5
         if (
@@ -73,15 +75,15 @@ export const checkBoard = (
           (i === dimention - center && j === 1) ||
           (j === dimention - center && i === 1)
         ) {
-          line[`${-1}${-1}`] += 1;
+          decisionLines[`${-1}${-1}`] += 1;
         }
 
         // checking possible line counter
         if (
-          line[`${i}${dimention}`] === dimention ||
-          line[`${dimention}${j}`] === dimention ||
-          line[`${dimention}${dimention}`] === dimention ||
-          line[`${-1}${-1}`] === dimention
+          decisionLines[`${i}${dimention}`] === dimention ||
+          decisionLines[`${dimention}${j}`] === dimention ||
+          decisionLines[`${dimention}${dimention}`] === dimention ||
+          decisionLines[`${-1}${-1}`] === dimention
         ) {
           isGameOver = true;
           break;
@@ -92,6 +94,6 @@ export const checkBoard = (
   return {
     isGameOver,
     board,
-    line,
+    decisionLines,
   };
 };

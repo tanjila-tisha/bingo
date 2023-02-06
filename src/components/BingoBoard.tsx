@@ -24,11 +24,12 @@ import {
   resetGame,
 } from "../features/bingo/bingoSlice";
 import { AppDispatch } from "../store";
+import { Square } from "../types";
 import { getCenter } from "../utils";
 import DisplayCard from "./DisplayCard";
 
-const BingoBoard = () => {
-  const [showStats, setShowStats] = useState(false);
+const BingoBoard = (): JSX.Element => {
+  const [showStats, setShowStats] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -45,13 +46,22 @@ const BingoBoard = () => {
 
   return (
     <>
+      {isOver && (
+        <Typography
+          variant="h3"
+          className="blink"
+          sx={{
+            marginBottom: 2,
+            marginTop: 2,
+            textAlign: "center",
+            color: "orange",
+          }}
+        >
+          HURRAY BINGO: GAME OVER!!
+        </Typography>
+      )}
       <Grid sx={{ display: "flex", justifyContent: "center" }}>
-        <Box sx={{ marginTop: 10 }}>
-          {isOver && (
-            <Typography variant="h3" sx={{ marginBottom: 5 }}>
-              Hurre BINGO: GAME OVER!!!!
-            </Typography>
-          )}
+        <Box sx={{ marginTop: 5 }}>
           <TableContainer component={Paper} sx={{ maxWidth: 500 }}>
             <Table>
               <TableHead>
@@ -77,7 +87,7 @@ const BingoBoard = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {board.map((col, colIndex) => (
+                {board.map((col: Square[], colIndex) => (
                   <TableRow key={`col-${colIndex}`}>
                     {col.map((row, rowIndex) => (
                       <TableCell

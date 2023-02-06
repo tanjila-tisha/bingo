@@ -1,14 +1,14 @@
 import { Card, CardContent, Typography } from "@mui/material";
 
-interface HistoryPanelProps {
+interface DisplayCardProps {
   item: string;
   title?: string;
 }
 
-const DisplayCard = ({ item, title }: HistoryPanelProps) => {
+const DisplayCard = ({ item, title }: DisplayCardProps): JSX.Element => {
   return (
     <Card
-      sx={{ minWidth: "50%", padding: 5, textAlign: "center" }}
+      sx={{ minWidth: "50%", padding: 5, textAlign: "center", marginBottom: 5 }}
       key={`${title}`}
     >
       <CardContent>
