@@ -12,15 +12,9 @@ const HomePage = (): JSX.Element => {
   return (
     <>
       <Box sx={{ textAlign: "center", marginTop: 5 }}>
-        {player.length ? (
           <Typography variant="h2" noWrap component="a">
-            Hello {player}
+          {player.length ? `Hello ${player}` :  'Bingo Board' }
           </Typography>
-        ) : (
-          <Typography variant="h2" noWrap component="a">
-            Bingo Board
-          </Typography>
-        )}
       </Box>
 
       {player.length ? (
